@@ -1,12 +1,18 @@
+from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.api.v1.deps import SessionDep
+from app.core.config import settings
+from app.core.security import create_access_token
 from app.crud.auths import authenticate
 
 router = APIRouter()
+
+
+access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
 
 @router.post("/login")
@@ -23,4 +29,4 @@ def login(
     )
     if not user:
         return {"error": "Invalid credentials"}
-    return {"message": "Login successful", "user_id": str(user.id)}
+    return {"access_token": (create_access_token(str(user.id), access_token_expires))}
