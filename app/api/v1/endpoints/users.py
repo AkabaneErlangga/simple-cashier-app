@@ -2,7 +2,7 @@ import uuid
 
 from fastapi import APIRouter, HTTPException
 
-from app.api.v1.deps import SessionDep
+from app.api.v1.deps import CurrentUser, SessionDep
 from app.core.utils import convert_to_schema
 from app.models.user import User
 from app.schemas.user import UserRead
@@ -10,7 +10,7 @@ from app.schemas.user import UserRead
 router = APIRouter()
 
 
-@router.get("/users/{user_id}", response_model=UserRead)
+@router.get("/users/id/{user_id}", response_model=UserRead)
 async def get_user(user_id: uuid.UUID, session: SessionDep) -> UserRead:
     """
     Retrieve a user by ID.
@@ -20,3 +20,11 @@ async def get_user(user_id: uuid.UUID, session: SessionDep) -> UserRead:
         raise HTTPException(status_code=404, detail="User not found")
 
     return convert_to_schema(user, UserRead)
+
+
+@router.get("/users/me", response_model=UserRead)
+async def get_current_user(current_user: CurrentUser, session: SessionDep):
+    """
+    Get current user.
+    """
+    return current_user
