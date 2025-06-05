@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    API_V1_STR: str = "/api/v1"
+    # API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = "GloryGloryMontelli"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     PROJECT_NAME: str = "Cashier App"

@@ -15,7 +15,12 @@ from app.schemas.order import OrderCreate, OrderItemCreate, OrderRead
 router = APIRouter()
 
 
-@router.post("/orders", response_model=OrderRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/orders",
+    response_model=OrderRead,
+    status_code=status.HTTP_201_CREATED,
+    tags=["orders"],
+)
 async def create_order(
     order_in: OrderCreate,
     current_user: CurrentUser,
@@ -35,7 +40,7 @@ async def create_order(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {item.product_ids} not found",
             )
-        
+
         if product.stock < item.quantities:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -88,7 +93,7 @@ async def create_order(
         )
 
 
-@router.get("/orders", response_model=List[OrderRead])
+@router.get("/orders", response_model=List[OrderRead], tags=["orders"])
 async def get_orders(
     current_user: CurrentUser,
     session: SessionDep,
@@ -102,7 +107,7 @@ async def get_orders(
     return orders
 
 
-@router.get("/orders/{order_id}", response_model=OrderRead)
+@router.get("/orders/{order_id}", response_model=OrderRead, tags=["orders"])
 async def get_order(
     order_id: UUID,
     current_user: CurrentUser,
@@ -122,4 +127,4 @@ async def get_order(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Order not found",
         )
-    return convert_to_schema(order, OrderRead) 
+    return order

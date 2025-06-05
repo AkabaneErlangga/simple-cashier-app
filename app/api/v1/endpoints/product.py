@@ -12,7 +12,7 @@ from app.schemas.product import ProductRead
 router = APIRouter()
 
 
-@router.get("/products", response_model=list[ProductRead])
+@router.get("/products", response_model=list[ProductRead], tags=["products"])
 async def get_products(session: SessionDep) -> list[ProductRead]:
     """
     Retrieve a list of products.
@@ -22,7 +22,7 @@ async def get_products(session: SessionDep) -> list[ProductRead]:
     return [convert_to_schema(product, ProductRead) for product in products]
 
 
-@router.get("/products/{product_id}", response_model=ProductRead)
+@router.get("/products/{product_id}", response_model=ProductRead, tags=["products"])
 async def get_product(product_id: UUID, session: SessionDep) -> ProductRead:
     """
     Retrieve a product by its ID.
@@ -37,7 +37,10 @@ async def get_product(product_id: UUID, session: SessionDep) -> ProductRead:
 
 
 @router.post(
-    "/products", response_model=ProductRead, status_code=status.HTTP_201_CREATED
+    "/products",
+    response_model=ProductRead,
+    status_code=status.HTTP_201_CREATED,
+    tags=["products"]
 )
 async def create_product(
     product_in: ProductCreate, current_user: CurrentUser, session: SessionDep
@@ -70,7 +73,7 @@ async def create_product(
         )
 
 
-@router.put("/products/{product_id}", response_model=ProductRead)
+@router.put("/products/{product_id}", response_model=ProductRead, tags=["products"])
 async def update_product(
     product_id: UUID,
     product: ProductCreate,
@@ -98,7 +101,7 @@ async def update_product(
     return convert_to_schema(existing_product, ProductRead)
 
 
-@router.delete("/products/{product_id}")
+@router.delete("/products/{product_id}", tags=["products"])
 async def delete_product(
     product_id: UUID, session: SessionDep, current_user: CurrentUser
 ):

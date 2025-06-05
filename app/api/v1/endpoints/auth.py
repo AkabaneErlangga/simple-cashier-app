@@ -15,7 +15,7 @@ router = APIRouter()
 access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
 
-@router.post("/login")
+@router.post("/login", tags=["auth"])
 def login(
     session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
