@@ -15,4 +15,4 @@ class UserRead(BaseModel):
     full_name: str | None = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
